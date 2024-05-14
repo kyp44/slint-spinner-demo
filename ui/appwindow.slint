@@ -1,17 +1,52 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { CheckBox, Spinner, Button, VerticalBox } from "std-widgets.slint";
 
 export component AppWindow inherits Window {
-    in-out property<int> counter: 42;
-    callback request-increase-value();
+    in-out property <float> counter: 50%;
     VerticalBox {
-        Text {
-            text: "Counter: \{root.counter}";
+        Spinner {
+            height: 30px;
+            progress: counter;
         }
+
         Button {
-            text: "Increase value";
+            height: 30px;
+            text: "Increase progress";
             clicked => {
-                root.request-increase-value();
+                counter += 0.05;
+                if counter > 1 {
+                    counter = 0;
+                }
             }
+        }
+
+        CheckBox {
+            text: "Align rect bottom right";
+            toggled => {
+                if (self.checked) {
+                    rect.x = parent.width - rect.width;
+                    rect.y = parent.height - rect.height;
+                } else {
+                    rect.x = 0px;
+                    rect.y = 0px;
+                }
+            }
+        }
+    }
+
+    rect := Rectangle {
+        x: 0;
+        y: 5px;
+        width: 40px;
+        height: 40px;
+        background: blue;
+        animate x {
+            duration: 500ms;
+            easing: ease-in-out;
+        }
+        animate y {
+            duration: 250ms;
+            delay: 500ms;
+            easing: ease-in;
         }
     }
 }
